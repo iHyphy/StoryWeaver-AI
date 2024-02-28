@@ -2,6 +2,13 @@ const express = require('express');
 const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
 const path = require('path');
+const mongoose = require('./db'); // Importing db.js
+/*
+const User = require('./models/user');
+const Thought = require('./models/thoughts');
+const User = require('./models/user');
+const Thought = require('./models/thoughts');
+*/   // for model functionality!!
 
 const { typeDefs, resolvers } = require('../../schemas');
 const db = require('./Main/server/config/connection');
@@ -11,6 +18,10 @@ const app = express();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+});
+
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
 });
 
 const startApolloServer = async () => {
