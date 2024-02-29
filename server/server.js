@@ -1,8 +1,4 @@
-const express = require('express');
-const { ApolloServer } = require('@apollo/server');
-const { expressMiddleware } = require('@apollo/server/express4');
-const path = require('path');
-const mongoose = require('./db'); // Importing db.js
+
 /*
 const User = require('./models/user');
 const Thought = require('./models/thoughts');
@@ -10,43 +6,62 @@ const User = require('./models/user');
 const Thought = require('./models/thoughts');
 */   // for model functionality!!
 
-const { typeDefs, resolvers } = require('../../schemas');
-const db = require('./Main/server/config/connection');
+const express = require('express');
+const { ApolloServer } = require('apollo-server-express');
+const path = require('path');
+const mongoose = require('./config/connection');
+const typeDefs = require('./graphql/schemas/typeDefs'); 
+const resolvers = require('./graphql/schemas/resolvers'); 
 
 const PORT = process.env.PORT || 3001;
 const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Import and mount character routes
+const characterRoutes = require('./routes/characterRoutes.js');
+app.use('/api/characters', characterRoutes);
+
+// Import and mount monster routes
+const monsterRoutes = require('./routes/monsterRoutes.js');
+app.use('/api/monsters', monsterRoutes);
+
+// Import and mount encounter routes
+const encounterRoutes = require('./routes/encounterRoutes.js');
+app.use('/api/encounters', encounterRoutes);
+
+
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
 });
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
-});
+async function startServer() {
+  await server.start(); 
 
-const startApolloServer = async () => {
-  await server.start();
-  
-  app.use(express.urlencoded({ extended: true }));
-  app.use(express.json());
-  
-  app.use('/graphql', expressMiddleware(server));
+ 
+  server.applyMiddleware({ app });
 
-  // if we're in production, serve client/dist as static assets
+
+  app.get('/', (req, res) => {
+    res.send('Welcome to the API server!');
+  });
+
+  
   if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../client/dist')));
-
+    
     app.get('*', (req, res) => {
       res.sendFile(path.join(__dirname, '../client/dist/index.html'));
     });
-  } 
+  }
 
-  db.once('open', () => {
-    app.listen(PORT, () => {
-      console.log(`API server running on port ${PORT}!`);
-      console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
-    });
+  app.listen(PORT, () => {
+    console.log(`API server running on port ${PORT}!`);
+    console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
   });
-};
+}
 
-startApolloServer();
+startServer();

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose'); // Import mongoose
+/*const mongoose = require('mongoose'); // Import mongoose
 const { Schema } = mongoose; // Import Schema from mongoose
 const ReactionSchema = require('./reactionSchema'); // Import the reaction schema
 
@@ -31,3 +31,4 @@ const thoughtSchema = new Schema(
 );
 
 module.exports = mongoose.model('Thought', thoughtSchema); // Export the model
+*/
