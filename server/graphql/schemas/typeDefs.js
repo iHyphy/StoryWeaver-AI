@@ -1,25 +1,38 @@
-const typeDefs = `
-  type Tech {
+const { gql } = require('apollo-server');
+
+const typeDefs = gql`
+  type Character {
     _id: ID!
     name: String!
+    class: String!
+    level: Int!
+    race: String!
   }
 
-  type Matchup {
+  type Monster {
     _id: ID!
-    tech1: String!
-    tech2: String!
-    tech1_votes: Int
-    tech2_votes: Int
+    name: String!
+    challengeRating: Float!
+    type: String!
+  }
+
+  type Encounter {
+    _id: ID!
+    name: String!
+    monsters: [Monster]!
+    characters: [Character]!
   }
 
   type Query {
-    tech: [Tech]
-    matchups(_id: String): [Matchup]
+    characters: [Character]
+    monsters: [Monster]
+    encounters: [Encounter]
   }
 
   type Mutation {
-    createMatchup(tech1: String!, tech2: String!): Matchup
-    createVote(_id: String!, techNum: Int!): Matchup
+    createCharacter(name: String!, class: String!, level: Int!, race: String!): Character
+    createMonster(name: String!, challengeRating: Float!, type: String!): Monster
+    createEncounter(name: String!, monsters: [ID]!, characters: [ID]!): Encounter
   }
 `;
 
