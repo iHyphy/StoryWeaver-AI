@@ -1,27 +1,29 @@
-const { Tech, Matchup } = require('../models');
+const { Character, Monster, Encounter } = require('../../models');
 
 const resolvers = {
   Query: {
-    tech: async () => {
-      return Tech.find({});
+    characters: async () => {
+      return Character.find({});
     },
-    matchups: async (parent, { _id }) => {
-      const params = _id ? { _id } : {};
-      return Matchup.find(params);
+    monsters: async () => {
+      return Monster.find({});
+    },
+    encounters: async () => {
+      return Encounter.find({});
     },
   },
   Mutation: {
-    createMatchup: async (parent, args) => {
-      const matchup = await Matchup.create(args);
-      return matchup;
+    createCharacter: async (parent, args) => {
+      const character = await Character.create(args);
+      return character;
     },
-    createVote: async (parent, { _id, techNum }) => {
-      const vote = await Matchup.findOneAndUpdate(
-        { _id },
-        { $inc: { [`tech${techNum}_votes`]: 1 } },
-        { new: true }
-      );
-      return vote;
+    createMonster: async (parent, args) => {
+      const monster = await Monster.create(args);
+      return monster;
+    },
+    createEncounter: async (parent, args) => {
+      const encounter = await Encounter.create(args);
+      return encounter;
     },
   },
 };
