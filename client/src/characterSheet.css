@@ -1,0 +1,65 @@
+.character-sheet {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .character-sheet h2 {
+    margin-top: 20px;
+  }
+  
+  .character-sheet label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .character-sheet ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .character-sheet li {
+    margin-bottom: 5px;
+  }
+  
+  .character-sheet input[type="text"],
+  .character-sheet input[type="number"],
+  .character-sheet input[type="checkbox"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .character-sheet input[type="checkbox"] {
+    display: inline-block;
+    width: auto;
+    margin-right: 5px;
+  }
+  
+  .character-sheet button {
+    display: inline-block;
+    padding: 8px 16px;
+    margin-right: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .character-sheet button:hover {
+    background-color: #0056b3;
+  }
+  
+  .character-sheet button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
