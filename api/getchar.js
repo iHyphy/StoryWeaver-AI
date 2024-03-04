@@ -15,7 +15,7 @@ createCharacterButton.addEventListener('click', async () => {
     const enemyType = document.getElementById('enemyType').value;
     const location = document.getElementById('location').value;
     // Gather other attributes as needed
-  
+
     // Create an object with user responses
     const characterData = { 
       characterName, 
@@ -29,16 +29,16 @@ createCharacterButton.addEventListener('click', async () => {
       location
       /*, other attributes */ 
     };
-    
+
     // Send user responses in the POST request to OpenAI
     const response = await axios.post('/api/generate-character-sheet', characterData);
-    
+
     // Handle the response from OpenAI and display the character sheet
     console.log('Character Sheet:', response.data);
     // Display the character sheet in a container
     const container4 = document.getElementById('container4');
     container4.innerHTML = response.data + `<button type="button" class="btn btn-secondary" onclick="showContainer('container4', 'container3')">Back</button>`;
-    
+
   } catch (error) {
     // Handle errors
     console.error('Error:', error);
