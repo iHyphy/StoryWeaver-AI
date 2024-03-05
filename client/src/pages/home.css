@@ -1,0 +1,56 @@
+/* Fonts */
+body {
+  font-family: 'Grenze', sans-serif;
+  margin: 0; /* Remove default body margin */
+}
+
+h1, h2 {
+  font-family: 'MedievalSharp', cursive;
+}
+
+/* Background */
+body {
+  background-color: #2e2e2e; /* DarkGray */
+  color: #ffffff; /* White */
+}
+
+.container-fluid {
+  padding-top: 0; /* Set padding top to 0 to align content to the top */
+}
+
+/* Heading */
+.header {
+  text-align: center; /* Center align the heading */
+  padding: 20px 0; /* Add padding to the top and bottom of the heading */
+}
+
+/* Tabs */
+.nav {
+  display: flex;
+  justify-content: space-between; /* Spread tabs evenly across the screen */
+  background-color: #3d3d3d; /* DarkGray */
+  border-radius: 0;
+  padding: 10px 20px; /* Adjust padding as needed */
+}
+
+.nav-link {
+  color: #ffffff; /* White */
+  text-decoration: none;
+  padding: 20px 40px; /* Increase padding to make tabs bigger */
+  border-radius: 0;
+  text-align: center; /* Center align the text */
+}
+
+.nav-link.active {
+  background-color: #5e5e5e; /* DarkGray */
+}
+
+/* Content */
+h1, h2 {
+  color: #ffffff; /* White */
+}
+
+p {
+  color: #ffffff; /* White */
+}
+
