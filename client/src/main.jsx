@@ -3,8 +3,12 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import App from './App.jsx';
 import Home from './pages/Home.jsx';
-import Matchup from './pages/Matchup.jsx';
-import Vote from './pages/Vote.jsx';
+import CharacterSheet from './pages/charactersheet.jsx';
+import Encounters from './pages/encounters.jsx';
+import Monsters from './pages/monsters.jsx';
+import Profile from './pages/profile.jsx';
+import Login from './pages/login.jsx';
+import SignOut from './pages/signout.jsx';
 import NotFound from './pages/NotFound.jsx';
 
 const router = createBrowserRouter([
@@ -16,15 +20,33 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />
-      }, {
-        path: '/matchup',
-        element: <Matchup />
-      }, {
-        path: '/matchup/:id',
-        element: <Vote />
       },
-    ],
-  },
+      {
+        path: '/charactersheet',
+        element: <CharacterSheet />
+      },
+      {
+        path: '/encounters',
+        element: <Encounters />
+      },
+      {
+        path: '/monsters',
+        element: <Monsters />
+      },
+      {
+        path: '/profile',
+        element: <Profile />
+      },
+      {
+        path: '/login',
+        element: <Login />
+      },
+      {
+        path: '/signout',
+        element: <SignOut />
+      }
+    ]
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(

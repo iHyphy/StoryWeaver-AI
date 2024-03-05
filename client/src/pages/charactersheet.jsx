@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../characterSheet.css'; // Import CSS for styling (optional)
 
+
 function CharacterSheet() {
   // State for character attributes
   const [character, setCharacter] = useState({
@@ -20,8 +21,23 @@ function CharacterSheet() {
     // Skills
     skills: {
       'Acrobatics': { ability: 'dexterity', proficiency: false },
+      'Animal Handling': { ability: 'wisdom', proficiency: false },
+      'Arcana': { ability: 'intelligence', proficiency: false },
       'Athletics': { ability: 'strength', proficiency: false },
-      // Add more skills as needed
+      'Deception': { ability: 'charisma', proficiency: false },
+      'History': { ability: 'intelligence', proficiency: false },
+      'Insight': { ability: 'wisdom', proficiency: false },
+      'Intimidation': { ability: 'charisma', proficiency: false },
+      'Investigation': { ability: 'intelligence', proficiency: false },
+      'Medicine': { ability: 'wisdom', proficiency: false },
+      'Nature': { ability: 'intelligence', proficiency: false },
+      'Perception': { ability: 'wisdom', proficiency: false },
+      'Performance': { ability: 'charisma', proficiency: false },
+      'Persuasion': { ability: 'charisma', proficiency: false },
+      'Religion': { ability: 'intelligence', proficiency: false },
+      'Sleight of Hand': { ability: 'dexterity', proficiency: false },
+      'Stealth': { ability: 'dexterity', proficiency: false },
+      'Survival': { ability: 'wisdom', proficiency: false },
     },
     // Equipment
     equipment: ['Backpack', 'Rations', 'Torch', 'Rope'],
@@ -65,10 +81,60 @@ function CharacterSheet() {
       {/* Add input fields for other character information (race, class, level, etc.) */}
 
       {/* Ability Scores */}
-      <h2>Ability Scores</h2>
-      <div>
-        {/* Display ability scores and buttons to modify them */}
-      </div>
+    {/* Ability Scores */}
+<h2>Ability Scores</h2>
+<div>
+  <label>
+    Strength:
+    <input
+      type="number"
+      value={character.strength}
+      onChange={(event) => handleAbilityScoreChange('strength', event.target.value)}
+    />
+  </label>
+  <label>
+    Constitution:
+    <input
+      type="number"
+      value={character.constitution}
+      onChange={(event) => handleAbilityScoreChange('constitution', event.target.value)}
+    />
+  </label>
+  <label>
+    Dexterity:
+    <input
+      type="number"
+      value={character.dexterity}
+      onChange={(event) => handleAbilityScoreChange('dexterity', event.target.value)}
+    />
+  </label>
+  <label>
+    Intelligence:
+    <input
+      type="number"
+      value={character.intelligence}
+      onChange={(event) => handleAbilityScoreChange('intelligence', event.target.value)}
+    />
+  </label>
+  <label>
+    Wisdom:
+    <input
+      type="number"
+      value={character.wisdom}
+      onChange={(event) => handleAbilityScoreChange('wisdom', event.target.value)}
+    />
+  </label>
+  <label>
+    Charisma:
+    <input
+      type="number"
+      value={character.charisma}
+      onChange={(event) => handleAbilityScoreChange('charisma', event.target.value)}
+    />
+  </label>
+  {/* Add similar input fields for other ability scores */}
+</div>
+
 
       {/* Skills */}
       <h2>Skills</h2>
@@ -108,3 +174,4 @@ function CharacterSheet() {
 }
 
 export default CharacterSheet;
+
