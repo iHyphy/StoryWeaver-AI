@@ -1,20 +1,30 @@
-import './App.css';
-import { Outlet } from 'react-router-dom';
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import React from 'react';
+import { Link } from 'react-router-dom'; // Import Link from React Router
+import { Nav } from 'react-bootstrap';
+import '../src/pages/Home';
 
-const client = new ApolloClient({
-  uri: '/graphql',
-  cache: new InMemoryCache(),
-});
-
-function App() {
+const Home = () => {
   return (
-    <ApolloProvider client={client}>
-      <div className="flex-column justify-center align-center min-100-vh bg-primary">
-        <Outlet />
+    <div className="container">
+      <header className="header">
+        <h1>StoryWeaver AI</h1>
+      </header>
+      <Nav variant="tabs" className="justify-content-center">
+        <Nav.Item>
+          <Link to="/CharacterSheet" className="nav-link">Character Sheet</Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Link to="/gameboard" className="nav-link">Gameboard</Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Link to="/Signup" className="nav-link">Sign In</Link>
+        </Nav.Item>
+      </Nav>
+      <div className="tab-content">
+        {/* Content for the current tab will be rendered here */}
       </div>
-    </ApolloProvider>
+    </div>
   );
-}
+};
 
-export default App;
+export default Home;
