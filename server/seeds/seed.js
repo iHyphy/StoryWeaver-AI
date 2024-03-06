@@ -1,14 +1,35 @@
-const db = require('../../../config/connection');
-const { Tech } = require('../../../models');
-const cleanDB = require('./cleanDB');
+const mongoose = require('../config/connection');
+const User = require('../models/user'); // Adjust the path if necessary
 
-const techData = require('./techData.json');
+mongoose.connection.once('open', async () => {
+  try {
+    // Clear existing users
+    await User.deleteMany({});
 
-db.once('open', async () => {
-  await cleanDB('Tech', 'teches');
+    // Generate sample user data
+    const userData = generateUserData(); // Implement this function to generate user data
 
-  await Tech.insertMany(techData);
+    // Insert sample user data
+    await User.insertMany(userData);
 
-  console.log('Technologies seeded!');
-  process.exit(0);
+    console.log('Users seeded successfully!');
+    process.exit(0);
+  } catch (error) {
+    console.error('Error seeding users:', error);
+    process.exit(1);
+  }
 });
+
+// Function to generate sample user data
+function generateUserData() {
+  const userData = [];
+  for (let i = 0; i < 10; i++) { // Generate 10 sample users
+    userData.push({
+      username: `user${i}`,
+      email: `user${i}@example.com`,
+      password: 'password123', // You can hash passwords here if needed
+      // Add other user fields as needed
+    });
+  }
+  return userData;
+}
