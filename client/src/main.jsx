@@ -9,6 +9,7 @@ import Monsters from './pages/monsters.jsx';
 import Profile from './pages/profile.jsx';
 import Login from './pages/login.jsx';
 import SignOut from './pages/signout.jsx';
+import SignUp from './pages/signup.jsx';
 import NotFound from './pages/NotFound.jsx';
 
 const router = createBrowserRouter([
@@ -44,7 +45,12 @@ const router = createBrowserRouter([
       {
         path: '/signout',
         element: <SignOut />
+      },
+      {
+        path: '/signup',
+        element: <SignUp />
       }
+
     ]
   }
 ]);
