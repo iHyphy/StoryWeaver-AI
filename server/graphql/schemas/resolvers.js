@@ -1,31 +1,42 @@
-const { Character, Monster, Encounter } = require('../../models');
+const { User } = require('../../models/user'); // Ensure that the User model is imported
+const jwt = require('jsonwebtoken');
+const config = require('../../config/config');
 
 const resolvers = {
-  Query: {
-    characters: async () => {
-      return Character.find({});
-    },
-    monsters: async () => {
-      return Monster.find({});
-    },
-    encounters: async () => {
-      return Encounter.find({});
-    },
-  },
   Mutation: {
-    createCharacter: async (parent, args) => {
-      const character = await Character.create(args);
-      return character;
+    signup: async (_, args) => {
+      const { username, email, password } = args;
+      try {
+        const user = await User.create({ username, email, password });
+        const token = jwt.sign({ userId: user._id }, 'chickentortilla1');
+        return { token, user };
+      } catch (error) {
+        throw new Error('Signup failed');
+      }
     },
-    createMonster: async (parent, args) => {
-      const monster = await Monster.create(args);
-      return monster;
-    },
-    createEncounter: async (parent, args) => {
-      const encounter = await Encounter.create(args);
-      return encounter;
-    },
+    login: async (_, args) => {
+      const { email, password } = args;
+      try {
+        const user = await User.findOne({ email });
+        if (!user) {
+          throw new Error('User not found');
+        }
+        const isValidPassword = await user.isValidPassword(password);
+        if (!isValidPassword) {
+          throw new Error('Invalid password');
+        }
+        const token = jwt.sign({ userId: user._id }, config.jwtSecret);
+        return { token, user };
+      } catch (error) {
+        throw new Error('Login failed');
+      }
+    }
   },
+  Query:{
+    users:async() => {
+      return User.find()
+    }
+  }
 };
 
 module.exports = resolvers;

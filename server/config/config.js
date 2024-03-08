@@ -1,6 +1,6 @@
 // config/config.js
 
 module.exports = {
-    jwtSecret: 'your_secret_key_here',
+    jwtSecret: 'chickentortilla1',
   };
   

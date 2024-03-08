@@ -23,16 +23,30 @@ const typeDefs = gql`
     characters: [Character]!
   }
 
+  type User {
+    _id: ID!
+    username: String!
+    email: String!
+  }
+
+  type AuthPayload {
+    token: String
+    user: User
+  }
+
   type Query {
     characters: [Character]
     monsters: [Monster]
     encounters: [Encounter]
+    users: [User] # Add this line
   }
 
   type Mutation {
     createCharacter(name: String!, class: String!, level: Int!, race: String!): Character
     createMonster(name: String!, challengeRating: Float!, type: String!): Monster
     createEncounter(name: String!, monsters: [ID]!, characters: [ID]!): Encounter
+    signup(username: String!, email: String!, password: String!): AuthPayload
+    login(email: String!, password: String!): AuthPayload
   }
 `;
 

@@ -1,45 +1,30 @@
 const express = require('express');
-const { ApolloServer } = require('apollo-server-express');
+const { ApolloServer } = require('apollo-server-express'); // Changed import statement
 const path = require('path');
-const mongoose = require('./config/connection.js');
-const cors = require('cors');
+const db = require('./config/connection.js');
 const typeDefs = require('./graphql/schemas/typeDefs.js');
 const resolvers = require('./graphql/schemas/resolvers.js');
-const authMiddleware = require('../middleware/authMiddleware.js');
+const { authMiddleware } = require('./utils/authMiddleware.js');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
 
-const corsOptions = {
-  origin: 'http://localhost:5173',
-  credentials: true,
-};
-
-app.use(cors(corsOptions));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-const characterRoutes = require('./routes/characterRoutes.js');
-const monsterRoutes = require('./routes/monsterRoutes.js');
-const encounterRoutes = require('./routes/encounterRoutes.js');
-const userRoutes = require('./routes/userRoutes.js');
-const loginRoutes = require('./routes/loginRoutes.js'); // Import loginRoutes
-
-app.use('/api/characters', characterRoutes);
-app.use('/api/monsters', monsterRoutes);
-app.use('/api/encounters', encounterRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/login', loginRoutes); // Mount loginRoutes at /api/login
-
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  cors: {
+    origin: ['http://localhost:5173', 'https://studio.apollographql.com'],
+    credentials: true,
+  },
+  context: authMiddleware,
 });
 
 async function startServer() {
   await server.start();
 
-  app.use('/api/users', authMiddleware);
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+
   server.applyMiddleware({ app });
 
   app.get('/', (req, res) => {
@@ -54,9 +39,11 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, () => {
-    console.log(`API server running on port ${PORT}!`);
-    console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
+  db.once('open', () => {
+    app.listen(PORT, () => {
+      console.log(`API server running on port ${PORT}!`);
+      console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
+    });
   });
 }
 

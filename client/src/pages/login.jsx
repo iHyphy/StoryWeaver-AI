@@ -1,38 +1,45 @@
+// components/Login.jsx
+
 import React, { useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { LOGIN_MUTATION } from '../utils/mutations';
+import { setContext } from '@apollo/client/link/context';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loginMutation, { loading, error }] = useMutation(LOGIN_MUTATION);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+      const { data } = await loginMutation({ variables: { email, password } });
+      console.log('Response data:', data); // Log the response data for debugging
+      const token = data.login.token;
+      console.log('Extracted token:', token); // Log the extracted token for debugging
+      localStorage.setItem('token', token);
+      console.log('Token saved in local storage');
+  
+      // Add the token to the request headers before making subsequent requests
+      const authLink = setContext((_, { headers }) => {
+        // Get the token from local storage
+        const token = localStorage.getItem('token');
+        return {
+          headers: {
+            ...headers,
+            Authorization: token ? `Bearer ${token}` : '',
+          },
+        };
       });
-      if (response.ok) {
-        const { token } = await response.json();
-        localStorage.setItem('token', token);
-        console.log('Login successful');
-        // Redirect the user to the dashboard or homepage
-        // history.push('/');
-      } else {
-        setError('Invalid email or password');
-        console.error('Login failed:', response.statusText);
-      }
+  
+      // Redirect the user to the dashboard or homepage
+      // history.push('/');
+  
     } catch (error) {
       console.error('Error logging in:', error);
-      setError('Internal Server Error');
-    } finally {
-      setLoading(false);
     }
   };
+  
 
   return (
     <div className="login-page">
@@ -59,7 +66,7 @@ function Login() {
           />
         </div>
         <button type="submit" disabled={loading}>{loading ? 'Logging in...' : 'Login'}</button>
-        {error && <div className="error-message">{error}</div>}
+        {error && <div className="error-message">{error.message}</div>}
       </form>
     </div>
   );

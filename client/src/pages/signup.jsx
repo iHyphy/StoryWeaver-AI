@@ -1,40 +1,32 @@
 import React, { useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { SIGNUP_MUTATION } from '../utils/mutations';
 
 function Signup() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [signupUser, { loading, error }] = useMutation(SIGNUP_MUTATION);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Send POST request to backend at http://localhost:3001/api/users
-      const response = await fetch('http://localhost:3001/api/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username, email, password }) // Include username in the request body
+      const { data } = await signupUser({
+        variables: { username, email, password }
       });
-      if (response.ok) {
-        alert('User created successfully');
-        // Reset form fields after successful signup
-        setUsername('');
-        setEmail('');
-        setPassword('');
-      } else {
-        console.error('Error creating user:', response.statusText);
-        alert('Error creating user');
-      }
+      const token = data.signup.token;
+      localStorage.setItem('token', token);
+      console.log('Signup successful');
+      // Redirect the user to the dashboard or homepage
+      // history.push('/');
     } catch (error) {
-      console.error('Error creating user:', error);
-      alert('Error creating user');
+      console.error('Error signing up:', error);
     }
   };
 
   return (
-    <div className="signup-form">
-      <h2>Sign Up</h2>
+    <div className="signup-page">
+      <h2>Signup</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="username">Username:</label>
@@ -66,7 +58,8 @@ function Signup() {
             required
           />
         </div>
-        <button type="submit">Sign Up</button>
+        <button type="submit" disabled={loading}>{loading ? 'Signing up...' : 'Signup'}</button>
+        {error && <div className="error-message">{error.message}</div>}
       </form>
     </div>
   );
