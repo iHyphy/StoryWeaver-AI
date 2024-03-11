@@ -1,65 +1,85 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { Link } from 'react-router-dom';
-import { SIGNUP_USER } from '../utils/mutations';
+import { gql } from '@apollo/client';
 
-const Signup = () => {
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-  });
+const SIGNUP_MUTATION = gql`
+  mutation Signup($username: String!, $email: String!, $password: String!) {
+    addUser(username: $username, email: $email, password: $password) {
+      token
+      user {
+        _id
+        username
+        email
+      }
+    }
+  }
+`;
 
-  const [signupUser, { error }] = useMutation(SIGNUP_USER);
+function Signup() {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null); // State for error handling
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  const [addUser, { loading }] = useMutation(SIGNUP_MUTATION);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      const { data } = await signupUser({
-        variables: { ...formData },
+      const { data } = await addUser({
+        variables: { username, email, password }
       });
-      console.log(data); // Handle success, e.g., redirect to another page
-    } catch (err) {
-      console.error(err);
+      const token = data.addUser.token;
+      localStorage.setItem('token', token);
+      console.log('Signup successful');
+      // Redirect the user to the dashboard or homepage
+      // history.push('/');
+    } catch (error) {
+      console.error('Error signing up:', error);
+      setError('An error occurred during signup. Please try again.');
     }
   };
+  
 
   return (
-    <div className="card bg-white card-rounded w-50">
-      <div className="card-header bg-dark text-center">
-        <h1>Sign Up</h1>
-      </div>
-      <div className="card-body text-center mt-3">
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="username" className="form-label">Username</label>
-            <input type="text" className="form-control" id="username" name="username" value={formData.username} onChange={handleChange} />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">Email address</label>
-            <input type="email" className="form-control" id="email" name="email" value={formData.email} onChange={handleChange} />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="password" className="form-label">Password</label>
-            <input type="password" className="form-control" id="password" name="password" value={formData.password} onChange={handleChange} />
-          </div>
-          <button type="submit" className="btn btn-primary">Sign Up</button>
-        </form>
-        {error && <div>Something went wrong...</div>}
-        <div className="card-footer text-center m-3">
-          Already have an account? <Link to="/login">Log in here</Link>
+    <div className="signup-page">
+      <h2>Signup</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="username">Username:</label>
+          <input
+            type="text"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
         </div>
-      </div>
+        <div className="form-group">
+          <label htmlFor="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit" disabled={loading}>{loading ? 'Signing up...' : 'Signup'}</button>
+        {error && <div className="error-message">{error}</div>}
+      </form>
     </div>
   );
-};
+}
 
 export default Signup;
