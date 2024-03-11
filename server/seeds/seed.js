@@ -1,35 +1,25 @@
-const mongoose = require('../config/connection');
-const User = require('../models/user'); // Adjust the path if necessary
+const db = require('../config/connection');
+const User = require('../models/user');
+const userSeeds = require('./userSeeds.json'); // Import userSeeds directly
 
-mongoose.connection.once('open', async () => {
-  try {
-    // Clear existing users
-    await User.deleteMany({});
+const cleanDB = require('./cleanDB');
 
-    // Generate sample user data
-    const userData = generateUserData(); // Implement this function to generate user data
+console.log('db:', db);
+console.log('User model:', User);
+console.log('userSeeds data:', userSeeds);
 
-    // Insert sample user data
-    await User.insertMany(userData);
+db.once('open', async () => {
+    try {
+        // Clean existing User data
+        await cleanDB('User', 'users');
 
-    console.log('Users seeded successfully!');
+        // Seed User data
+        await User.create(userSeeds);
+    } catch (err) {
+        console.error(err);
+        process.exit(1);
+    }
+
+    console.log('Seeding completed successfully!');
     process.exit(0);
-  } catch (error) {
-    console.error('Error seeding users:', error);
-    process.exit(1);
-  }
 });
-
-// Function to generate sample user data
-function generateUserData() {
-  const userData = [];
-  for (let i = 0; i < 10; i++) { // Generate 10 sample users
-    userData.push({
-      username: `user${i}`,
-      email: `user${i}@example.com`,
-      password: 'password123', // You can hash passwords here if needed
-      // Add other user fields as needed
-    });
-  }
-  return userData;
-}

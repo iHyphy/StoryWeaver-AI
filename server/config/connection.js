@@ -10,4 +10,4 @@ mongoose.connect('mongodb://localhost:27017/storyweaver-ai', {
 
 // Define your Mongoose schemas and models here if needed
 
-module.exports = mongoose;
+module.exports = mongoose.connection;

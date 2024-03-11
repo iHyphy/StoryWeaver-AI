@@ -1,31 +1,80 @@
-const { Character, Monster, Encounter } = require('../../models');
+const User = require('../../../server/models/user');
+const  { signToken, AuthenticationError } = require('../../utils/authMiddleware');
 
 const resolvers = {
   Query: {
-    characters: async () => {
-      return Character.find({});
+    users: async () => {
+      return User.find();
     },
-    monsters: async () => {
-      return Monster.find({});
-    },
-    encounters: async () => {
-      return Encounter.find({});
+    user: async (parent, { username }) => {
+      return User.findOne({ username });
     },
   },
+
   Mutation: {
-    createCharacter: async (parent, args) => {
-      const character = await Character.create(args);
-      return character;
+    addUser: async (_, { username, email, password }) => {
+      try {
+        // Validate if username is provided
+        if (!username) {
+          throw new Error('Username is required.');
+        }
+  
+        // Validate if email is provided
+        if (!email) {
+          throw new Error('Email is required.');
+        }
+  
+        // Validate if password is provided
+        if (!password) {
+          throw new Error('Password is required.');
+        }
+  
+        // Check if the email is already registered
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+          throw new Error('Email is already registered.');
+        }
+  
+        // Create the user
+        const user = await User.create({ username, email, password });
+  
+        // Generate token
+        const token = signToken(user);
+  
+        return { token, user };
+      } catch (error) {
+        // Handle specific error messages
+        if (error.message.startsWith('E11000 duplicate key error')) {
+          throw new Error('Email or username already exists.');
+        }
+  
+        // If it's a known error, throw it directly
+        console.log(error)
+        throw error;
+      }
     },
-    createMonster: async (parent, args) => {
-      const monster = await Monster.create(args);
-      return monster;
+    login: async (parent, { email, password }) => {
+      try{ const user = await User.findOne({ email });
+  
+      if (!user) {
+        throw new AuthenticationError('User not found');
+      }
+  
+      const correctPw = await user.isCorrectPassword(password);
+  
+      if (!correctPw) {
+        throw new AuthenticationError('Incorrect password');
+      }
+  
+      const token = signToken(user);
+      return { token, user };
+        
+      } catch (error) {
+        console.log(error)
+      }
     },
-    createEncounter: async (parent, args) => {
-      const encounter = await Encounter.create(args);
-      return encounter;
-    },
-  },
+  }
 };
 
 module.exports = resolvers;
+
