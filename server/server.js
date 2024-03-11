@@ -1,5 +1,6 @@
 const express = require('express');
-const { ApolloServer } = require('apollo-server-express'); // Changed import statement
+const { ApolloServer } = require('@apollo/server');
+const { expressMiddleware } = require('@apollo/server/express4');
 const path = require('path');
 const db = require('./config/connection.js');
 const typeDefs = require('./graphql/schemas/typeDefs.js');
@@ -19,15 +20,17 @@ const server = new ApolloServer({
   context: authMiddleware,
 });
 
-async function startServer() {
+const startApolloServer = async () => {
   await server.start();
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  server.applyMiddleware({ app });
+app.use('/graphql', expressMiddleware(server, {
+  context: authMiddleware
+}));
 
-  app.get('/', (req, res) => {
+app.get('/', (req, res) => {
     res.send('Welcome to the API server!');
   });
 
@@ -38,13 +41,16 @@ async function startServer() {
       res.sendFile(path.join(__dirname, '../client/dist/index.html'));
     });
   }
+// added db.once possible perm 
 
-  db.once('open', () => {
-    app.listen(PORT, () => {
-      console.log(`API server running on port ${PORT}!`);
-      console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
-    });
+db.once('open', () => {
+  app.listen(PORT, () => {
+    console.log(`API server running on port ${PORT}!`);
+    console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
   });
-}
+});
+};
 
-startServer();
+// Call the async function to start the server
+startApolloServer();
+

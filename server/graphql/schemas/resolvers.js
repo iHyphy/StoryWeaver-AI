@@ -1,42 +1,80 @@
-const { User } = require('../../models/user'); // Ensure that the User model is imported
-const jwt = require('jsonwebtoken');
-const config = require('../../config/config');
+const User = require('../../../server/models/user');
+const  { signToken, AuthenticationError } = require('../../utils/authMiddleware');
 
 const resolvers = {
+  Query: {
+    users: async () => {
+      return User.find();
+    },
+    user: async (parent, { username }) => {
+      return User.findOne({ username });
+    },
+  },
+
   Mutation: {
-    signup: async (_, args) => {
-      const { username, email, password } = args;
+    addUser: async (_, { username, email, password }) => {
       try {
+        // Validate if username is provided
+        if (!username) {
+          throw new Error('Username is required.');
+        }
+  
+        // Validate if email is provided
+        if (!email) {
+          throw new Error('Email is required.');
+        }
+  
+        // Validate if password is provided
+        if (!password) {
+          throw new Error('Password is required.');
+        }
+  
+        // Check if the email is already registered
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+          throw new Error('Email is already registered.');
+        }
+  
+        // Create the user
         const user = await User.create({ username, email, password });
-        const token = jwt.sign({ userId: user._id }, 'chickentortilla1');
+  
+        // Generate token
+        const token = signToken(user);
+  
         return { token, user };
       } catch (error) {
-        throw new Error('Signup failed');
+        // Handle specific error messages
+        if (error.message.startsWith('E11000 duplicate key error')) {
+          throw new Error('Email or username already exists.');
+        }
+  
+        // If it's a known error, throw it directly
+        console.log(error)
+        throw error;
       }
     },
-    login: async (_, args) => {
-      const { email, password } = args;
-      try {
-        const user = await User.findOne({ email });
-        if (!user) {
-          throw new Error('User not found');
-        }
-        const isValidPassword = await user.isValidPassword(password);
-        if (!isValidPassword) {
-          throw new Error('Invalid password');
-        }
-        const token = jwt.sign({ userId: user._id }, config.jwtSecret);
-        return { token, user };
-      } catch (error) {
-        throw new Error('Login failed');
+    login: async (parent, { email, password }) => {
+      try{ const user = await User.findOne({ email });
+  
+      if (!user) {
+        throw new AuthenticationError('User not found');
       }
-    }
-  },
-  Query:{
-    users:async() => {
-      return User.find()
-    }
+  
+      const correctPw = await user.isCorrectPassword(password);
+  
+      if (!correctPw) {
+        throw new AuthenticationError('Incorrect password');
+      }
+  
+      const token = signToken(user);
+      return { token, user };
+        
+      } catch (error) {
+        console.log(error)
+      }
+    },
   }
 };
 
 module.exports = resolvers;
+

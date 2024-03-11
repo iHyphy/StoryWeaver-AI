@@ -1,9 +1,19 @@
-// components/Login.jsx
-
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { LOGIN_MUTATION } from '../utils/mutations';
-import { setContext } from '@apollo/client/link/context';
+import { gql } from '@apollo/client'; // Import gql from @apollo/client
+
+const LOGIN_MUTATION = gql`
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      token
+      user {
+        _id
+        username
+        email
+      }
+    }
+  }
+`;
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -21,25 +31,13 @@ function Login() {
       console.log('Token saved in local storage');
   
       // Add the token to the request headers before making subsequent requests
-      const authLink = setContext((_, { headers }) => {
-        // Get the token from local storage
-        const token = localStorage.getItem('token');
-        return {
-          headers: {
-            ...headers,
-            Authorization: token ? `Bearer ${token}` : '',
-          },
-        };
-      });
-  
       // Redirect the user to the dashboard or homepage
-      // history.push('/');
+      window.location.replace('/');
   
     } catch (error) {
       console.error('Error logging in:', error);
     }
   };
-  
 
   return (
     <div className="login-page">

@@ -1,28 +1,45 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { SIGNUP_MUTATION } from '../utils/mutations';
+import { gql } from '@apollo/client';
+
+const SIGNUP_MUTATION = gql`
+  mutation Signup($username: String!, $email: String!, $password: String!) {
+    addUser(username: $username, email: $email, password: $password) {
+      token
+      user {
+        _id
+        username
+        email
+      }
+    }
+  }
+`;
 
 function Signup() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [signupUser, { loading, error }] = useMutation(SIGNUP_MUTATION);
+  const [error, setError] = useState(null); // State for error handling
+
+  const [addUser, { loading }] = useMutation(SIGNUP_MUTATION);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await signupUser({
+      const { data } = await addUser({
         variables: { username, email, password }
       });
-      const token = data.signup.token;
+      const token = data.addUser.token;
       localStorage.setItem('token', token);
       console.log('Signup successful');
       // Redirect the user to the dashboard or homepage
       // history.push('/');
     } catch (error) {
       console.error('Error signing up:', error);
+      setError('An error occurred during signup. Please try again.');
     }
   };
+  
 
   return (
     <div className="signup-page">
@@ -59,7 +76,7 @@ function Signup() {
           />
         </div>
         <button type="submit" disabled={loading}>{loading ? 'Signing up...' : 'Signup'}</button>
-        {error && <div className="error-message">{error.message}</div>}
+        {error && <div className="error-message">{error}</div>}
       </form>
     </div>
   );
