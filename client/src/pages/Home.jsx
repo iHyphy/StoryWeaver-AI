@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import backgroundImage from "../assets/background.jpg"; // Import your background image
-
 function Home() {
   const backgroundStyle = {
     backgroundImage: `url(${backgroundImage})`,
@@ -13,7 +12,6 @@ function Home() {
     justifyContent: 'center',
     flexDirection: 'column'
   };
-
   return (
     <div style={backgroundStyle}>
       <nav className="navbar">
@@ -41,5 +39,4 @@ function Home() {
     </div>
   );
 }
-
 export default Home;
