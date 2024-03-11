@@ -1,4 +1,5 @@
 import React from 'react';
+<<<<<<< HEAD
 import { Link } from 'react-router-dom';
 import backgroundImage from "../assets/background.jpg"; // Import your background image
 
@@ -13,8 +14,15 @@ function Home() {
     justifyContent: 'center',
     flexDirection: 'column'
   };
+=======
+import { Link } from 'react-router-dom'; // Import Link from React Router
+import { Nav } from 'react-bootstrap';
+import './home.css';
+>>>>>>> 86e370d (added bootstrap. and fixed some .jsx files as well)
 
+const Home = () => {
   return (
+<<<<<<< HEAD
     <div style={backgroundStyle}>
       <nav className="navbar">
         <div className="navbar-brand">
@@ -38,8 +46,32 @@ function Home() {
       <footer className="footer" style={{ position: 'absolute', bottom: '0', width: '100%', textAlign: 'center' }}>
         <p style={{ color: '#fff' }}>&copy; 2024 Your D&D Campaign Builder</p>
       </footer>
+=======
+    <div className="container">
+      <header className="header">
+        <h1>StoryWeaver AI</h1>
+      </header>
+      <Nav variant="tabs" className="justify-content-center">
+        <Nav.Item>
+          <Nav.Link href="/charactersheet">Character Sheet</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link href="/gameboard">Gameboard</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link href="/signin">Sign In</Nav.Link>
+        </Nav.Item>
+      </Nav>
+      <div className="tab-content">
+        {/* Content for the current tab will be rendered here */}
+      </div>
+>>>>>>> 86e370d (added bootstrap. and fixed some .jsx files as well)
     </div>
   );
 };
 
+<<<<<<< HEAD
 export default Home;
+=======
+export default Home;
+>>>>>>> 86e370d (added bootstrap. and fixed some .jsx files as well)
