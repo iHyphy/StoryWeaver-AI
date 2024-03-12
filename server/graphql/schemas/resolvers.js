@@ -1,5 +1,7 @@
 const User = require('../../../server/models/user');
-const  { signToken, AuthenticationError } = require('../../utils/authMiddleware');
+const { signToken, AuthenticationError } = require('../../utils/authMiddleware');
+const fetch = require('node-fetch');
+require('dotenv').config(); // Import dotenv to access environment variables
 
 const resolvers = {
   Query: {
@@ -8,6 +10,10 @@ const resolvers = {
     },
     user: async (parent, { username }) => {
       return User.findOne({ username });
+    },
+    getOpenAIApiKey: async () => {
+      // Retrieve the OpenAI API key from the environment variable
+      return process.env.REACT_APP_OPENAI_API_KEY || '';
     },
   },
 
@@ -54,26 +60,41 @@ const resolvers = {
       }
     },
     login: async (parent, { email, password }) => {
-      try{ const user = await User.findOne({ email });
+      try {
+        const user = await User.findOne({ email });
   
-      if (!user) {
-        throw new AuthenticationError('User not found');
-      }
+        if (!user) {
+          throw new AuthenticationError('User not found');
+        }
   
-      const correctPw = await user.isCorrectPassword(password);
+        const correctPw = await user.isCorrectPassword(password);
   
-      if (!correctPw) {
-        throw new AuthenticationError('Incorrect password');
-      }
+        if (!correctPw) {
+          throw new AuthenticationError('Incorrect password');
+        }
   
-      const token = signToken(user);
-      return { token, user };
+        const token = signToken(user);
+        return { token, user };
         
       } catch (error) {
         console.log(error)
       }
     },
-  }
+    setOpenAIApiKey: async (_, { apiKey }) => {
+      try {
+        // You can perform validation or additional checks here
+        
+        // For demonstration purposes, let's just set it to an environment variable
+        process.env.REACT_APP_OPENAI_API_KEY = apiKey;
+        
+        // You might want to return a success message or the new API key
+        return 'OpenAI API key has been set successfully';
+      } catch (error) {
+        console.error('Error setting OpenAI API key:', error);
+        throw new Error('Failed to set OpenAI API key');
+      }
+    },
+  },
 };
 
 module.exports = resolvers;
