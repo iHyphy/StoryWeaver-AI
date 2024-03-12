@@ -1,13 +1,17 @@
 import { useState } from "react";
-// import reactLogo from "../assets/react.svg";
-// import viteLogo from "../../public/vite.svg";
-import "../../src/App.css";
+import { useQuery, gql } from "@apollo/client"; // Import useQuery and gql
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from '@chatscope/chat-ui-kit-react'; 
 
-const API_KEY = "";
+const GET_OPENAI_API_KEY = gql`
+  query GetOpenAIApiKey {
+    getOpenAIApiKey
+  }
+`;
 
 function Monsters() {
+  const { loading, error, data } = useQuery(GET_OPENAI_API_KEY); // Use the useQuery hook to fetch the API key
+
   const [typing, setTyping] = useState(false);
   const [messages, setMessages] = useState([
     {
@@ -34,53 +38,13 @@ function Monsters() {
   };
 
   async function processMessageToChatGPT(chatMessages, retryDelay = 1000) {
-    
-    let apiMessages = chatMessages.map((messageObject) => {
-      let role = "";
+    // Your existing logic for processing messages
+  }
 
-      if(messageObject.sender === "ChatGPT") {
-        
-        role = "assistant";
-      } else {
-        role = "user";
-      }
-      return { role: role, content: messageObject.message }
-    });
+  if (loading) return <p>Loading...</p>; // Show loading message while fetching API key
+  if (error) return <p>Error fetching API key: {error.message}</p>; // Show error message if fetching API key fails
 
-    const systemMessage = {
-      role: "system",
-      content: "Speak like you are a master D&D player that creates monsters for your friends."
-    }
-
-    const apiRequestBody = {
-      "model": "gpt-3.5-turbo",
-      "messages": [
-        systemMessage,
-        ...apiMessages
-      ]
-    }
-    
-   await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer " + API_KEY,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(apiRequestBody)
-      }).then((data) => {
-        return data.json();
-      }).then((data) => {
-        console.log(data);
-        console.log(data.choices[0].message.content);
-        setMessages(
-          [...chatMessages, {
-            message: data.choices[0].message.content,
-            sender: "ChatGPT"
-          }]
-        );
-        setTyping(false);
-      })
-    }
+  const API_KEY = data.getOpenAIApiKey; // Get the API key from the fetched data
 
   return (
     <div className="container monsters-page">
@@ -93,19 +57,5 @@ function Monsters() {
     </div>
   );
 }
+
 export default Monsters;
-
-
-
-// import React from 'react';
-
-// function Monsters() {
-//   return (
-//     <div className="monsters-page">
-//       <h2>Monsters</h2>
-//       <p>This is the Monsters page. You can view and manage your monsters here.</p>
-//     </div>
-//   );
-// }
-
-// export default Monsters;
