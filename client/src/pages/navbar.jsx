@@ -12,6 +12,7 @@ function Navbar() {
           <Link to="/charactersheet" className="navbar-item">Character Sheet</Link>
           <Link to="/encounters" className="navbar-item">Encounters</Link>
           <Link to="/monsters" className="navbar-item">Monsters</Link>
+          <Link to="/gameboard" className="navbar-item">Gameboard</Link>
         </div>
         <div className="navbar-end">
           <Link to="/profile" className="navbar-item">Profile</Link>
