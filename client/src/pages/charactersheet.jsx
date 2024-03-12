@@ -20,6 +20,7 @@ function App() {
       direction: "outgoing"
     };
 
+
     // Update messages state optimistically
     setMessages(prevMessages => [...prevMessages, newMessage]);
 
@@ -35,10 +36,12 @@ function App() {
     }
   };
 
+
   async function processMessageToChatGPT(chatMessages, retryDelay = 1000) {
     
     let apiMessages = chatMessages.map((messageObject) => {
       let role = "";
+
 
       if(messageObject.sender === "ChatGPT") {
         
@@ -49,10 +52,38 @@ function App() {
       return { role: role, content: messageObject.message }
     });
 
+
     const systemMessage = {
       role: "system",
       content: "Speak like you are a master D&D player that creates character sheets for your friends."
     }
+
+      {/* Skills */}
+      <h2>Skills</h2>
+      <div className="row">
+        {Object.entries(character.skills).map(([skillName, { ability, proficiency }]) => (
+          <div key={skillName} className="col-md-4 mb-3">
+            <div className="card">
+              <div className="card-body">
+                <h5 className="card-title">{skillName}</h5>
+                <p className="card-text">Ability: {ability}</p>
+              </div>
+              <div className="card-footer d-flex justify-content-end">
+                <div className="form-check">
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    checked={proficiency}
+                    onChange={() => toggleSkillProficiency(skillName)}
+                  />
+                  <label className="form-check-label">Proficient</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
 
     const apiRequestBody = {
       "model": "gpt-3.5-turbo",
@@ -129,4 +160,10 @@ function App() {
     </div>
   );
 }
+
 export default App;
+
+
+
+
+
