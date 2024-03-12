@@ -1,0 +1,15 @@
+/* Mideval styling  */
+.medieval-style {
+    border: 2px solid #8b4513; /* Dark brown border */
+    background-color: #f5deb3; /* Wheat background */
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px #8b4513; /* Dark brown shadow */
+  };
+  
+.medieval-style h3 {
+    color: #8b4513; /* Dark brown text color */
+  };
+  
+.medieval-style .btn-primary {
+    background-color: #8b4513; /* Dark brown button */
+};
