@@ -83,20 +83,14 @@ function Encounters() {
     }
 
   return (
-    <div className="App">
-      <div style={{ position: "relative", width: "700px", height: "800px" }}>
-        <MainContainer>
-          <ChatContainer>
-            <MessageList
-              typingIndicator={typing ? <TypingIndicator content="ChatGPT is typing..." /> : null}
-            >
-              {messages.map((message, i) => {
-                return <Message key={i} model={message} />;
-              })}
-            </MessageList>
-            <MessageInput placeholder="Type message here" onSend={handleSend} />
-          </ChatContainer>
-        </MainContainer>
+    <div className="container encounter-page">
+      <div className="row justify-content-center">
+        <div className="col-md-8">
+          <div className="encounters-page text-center">
+            <h2>Encounters</h2>
+            <p>This is the Encounters page. You can manage your encounters here.</p>
+          </div>
+        </div>
       </div>
     </div>
   );

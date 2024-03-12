@@ -57,3 +57,104 @@
     background-color: #8b4513; /* Dark brown button */
 };
 
+/* Login page styling */
+
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  position: relative;
+}
+
+.login-form {
+  background-color: rgba(129, 11, 11, 0.8); /* Adjust the background color and opacity as needed */
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 2px 2px 5px rgba(129, 11, 11, 0.8);
+}
+
+.login-form h2 {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.login-page label {
+  display: block;
+  color: #fafafa;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  margin-top: 5px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff; /* Adjust the button color as needed */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3; /* Adjust the hover color as needed */
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+/* Signup page styling */
+
+.signup-page {
+  background-color: #807073; /* Grey background color */
+  padding: 20px; /* Add some padding for better spacing */
+  box-shadow: 2px 2px 5px #807073;
+}
+
+.signup-page label {
+  color: orange; /* Set label color to orange */
+}
+
+/* Signout page styling */
+.sign-out-page {
+  background-image: url('./assets/background2.jpg'); /* Specify the path to your background image */
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-container {
+  text-align: center;
+  color: rgb(25, 5, 112); /* Adjust text color as needed */
+}
+
+/* Encounter page styling */
+.encounter-page {
+  margin-top: 50px;
+  text-align: center;
+  background-color: lightgreen; /* Adjust as needed */
+}
+
+/* Monster page styling */
+.monsters-page {
+  margin-top: 50px;
+  text-align: center;
+  background-color: lightblue; /* Adjust as needed */
+}

@@ -83,22 +83,29 @@ function Monsters() {
     }
 
   return (
-    <div className="App">
-      <div style={{ position: "relative", width: "700px", height: "800px" }}>
-        <MainContainer>
-          <ChatContainer>
-            <MessageList
-              typingIndicator={typing ? <TypingIndicator content="ChatGPT is typing..." /> : null}
-            >
-              {messages.map((message, i) => {
-                return <Message key={i} model={message} />;
-              })}
-            </MessageList>
-            <MessageInput placeholder="Type message here" onSend={handleSend} />
-          </ChatContainer>
-        </MainContainer>
+    <div className="container monsters-page">
+      <div className="row justify-content-center">
+        <div className="col-md-8">
+          <h2>Monsters</h2>
+          <p>This is the Monsters page. You can view and manage your monsters here.</p>
+        </div>
       </div>
     </div>
   );
 }
 export default Monsters;
+
+
+
+// import React from 'react';
+
+// function Monsters() {
+//   return (
+//     <div className="monsters-page">
+//       <h2>Monsters</h2>
+//       <p>This is the Monsters page. You can view and manage your monsters here.</p>
+//     </div>
+//   );
+// }
+
+// export default Monsters;
