@@ -66,9 +66,4 @@ function Charactersheet() {
   );
 }
 
-export default App;
-
-
-
-
-
+export default Charactersheet;
