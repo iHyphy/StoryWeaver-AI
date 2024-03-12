@@ -1,66 +1,60 @@
 require('dotenv').config();
+console.log('API route registered: POST /api/generateCharacterSheet');
 
 const express = require('express');
-const bodyParser = require('body-parser');
-const { OpenAI } = require('openai');
-const app = express();
+const router = express.Router();
+const axios = require('axios');
+const openaiApiKey = process.env.REACT_APP_OPENAI_API_KEY;
 
-
-// Initialize OpenAI API client
-const openai = new OpenAI({ apiKey: "process.env.OPENAI_API_KEY" });
-
-// Middleware to parse JSON bodies
-app.use(bodyParser.json());
-
-
-
-// POST endpoint to generate a character sheet using OpenAI
-app.post('/', async (req, res) => {
+router.post('/', async (req, res) => {
   try {
-    // Extract character attributes from the request body
-    const { name, race, class: characterClass, level, background, alignment, playerName } = req.body;
+    const messages = req.body.messages;
 
-    // Create a prompt for OpenAI based on the character attributes
-    const prompt = `
-      Character name: ${name}
-      Race: ${race}
-      Class: ${characterClass}
-      Level: ${level}
-      Background: ${background}
-      Alignment: ${alignment}
-      Player name: ${playerName}
-    `;
+    if (!Array.isArray(messages)) {
+      return res.status(400).json({ message: 'Invalid request body: messages must be an array.' });
+    }
 
-    // Call OpenAI API to generate the character sheet
-    const response = await openai.createChatCompletion({
-      model: 'gpt-3.5-turbo', // Choose the appropriate model
-      messages: [
-        {
-          role: 'system',
-          content: 'You are a helpful assistant that creates characters for a D&D campaign based on the prompts from the user which are Character Name, Race, Class, Level, Background, Alignment, and Player Name.',
-          max_tokens: 100,
-        },
-        {
-          role: 'user',
-          content: prompt,
-        },
-      ],
-    });
-
-    // Extract the generated character sheet from the OpenAI API response
-    const generatedSheet = response.data.choices[0].message.content;
-
-    // Send the generated character sheet as a response
-    res.send(generatedSheet);
+    const responseMessage = await processMessageToChatGPT(messages);
+    res.json({ message: responseMessage });
   } catch (error) {
-    // Handle errors
     console.error('Error:', error);
-    res.status(500).send('Internal Server Error');
+    res.status(500).json({ message: 'An error occurred while processing the message.', error: error.message });
   }
 });
 
-// Start the server
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+
+async function processMessageToChatGPT(chatMessages) {
+  try {
+    const systemMessage = {
+      role: "system",
+      content: "Speak like you are a master D&D player that creates character sheets for your friends."
+    };
+
+    const apiRequestBody = {
+      model: "gpt-3.5-turbo",
+      messages: [systemMessage, ...chatMessages.map(message => ({ role: 'user', content: message }))],
+    };
+
+    console.log('Sending request to OpenAI API:', apiRequestBody); // Log the request body
+
+    const response = await axios.post("https://api.openai.com/v1/chat/completions", apiRequestBody, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`
+      }
+    });
+
+    const responseData = response.data;
+    console.log('OpenAI API response:', responseData); // Log the response data
+
+    if (!responseData || !responseData.choices || !responseData.choices[0] || !responseData.choices[0].message) {
+      throw new Error('Unexpected API response');
+    }
+
+    return responseData.choices[0].message.content;
+  } catch (error) {
+    console.error('Error processing message:', error);
+    throw error;
+  }
+}
+module.exports = router;
