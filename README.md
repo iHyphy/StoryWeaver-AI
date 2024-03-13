@@ -26,6 +26,7 @@ ${installation}
 -install dependencies
 -run mongod
 -run nodemon server.js
+-run npm run dev
 ensure you have mongocompass and insomnia installed or various other apps for the same purpose
 
 ## Usage
@@ -40,7 +41,7 @@ ${features}
 
 ## Contributing
 ${contributing}
-Albert Branom, Xpert Learning Assistant, 
+Albert Branom, Benjamin Pippenjer, Manraj, Dominique  
 
 ## License
 [Mit License](https://choosealicense.com/licenses/mit/#)
@@ -50,10 +51,19 @@ ${tests}
 n/a
 
 ## Questions
-- [bybymaxy](https://github.com/bybymaxy/Social-boys-API)
-- [send-email-to](mailto:bybymaxy@gmail.com)
-- [Live website link](https://drive.google.com/file/d/1eLlhLA8fxQECsv6mzRE4UPzAkDkmE8u5/view)
+- [Live website link]()
 
 ## Screenshots
 ${screenshots}
-did link to live.
+![image](https://github.com/iHyphy/StoryWeaver-AI/assets/145737984/bb450c17-ddb7-4320-9b12-7bbad1a10461)
+![image](https://github.com/iHyphy/StoryWeaver-AI/assets/145737984/013b5485-c0f2-40f4-941c-ec587ab0e866)
+![image](https://github.com/iHyphy/StoryWeaver-AI/assets/145737984/e1ac11f3-af96-4981-b16f-3d65051d6c9c)
+![image](https://github.com/iHyphy/StoryWeaver-AI/assets/145737984/9c615345-39ed-4c67-89d8-03ba21d4ad6b)
+![image](https://github.com/iHyphy/StoryWeaver-AI/assets/145737984/74b0df88-b7af-4cd5-af61-43d887b0ee61)
+![image](https://github.com/iHyphy/StoryWeaver-AI/assets/145737984/7e128e70-e993-43b9-8e8d-94639b0150e3)
+![image](https://github.com/iHyphy/StoryWeaver-AI/assets/145737984/d3265352-1d33-4dcb-a705-d450a2d95ec4)
+![image](https://github.com/iHyphy/StoryWeaver-AI/assets/145737984/fdcd0566-1234-49ea-b9bc-88f5ff70464b)
+
+
+
+
