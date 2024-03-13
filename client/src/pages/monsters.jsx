@@ -1,17 +1,17 @@
 import { useState } from "react";
-// import reactLogo from "../assets/react.svg";
-// import viteLogo from "../../public/vite.svg";
-import "../../src/App.css";
+//import reactLogo from "./assets/react.svg";
+//import viteLogo from "/vite.svg";
+//import "./App.css";
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from '@chatscope/chat-ui-kit-react'; 
 
-//const API_KEY = "";
+const API_KEY = "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";
 
-function Encounters() {
+function Monsters() {
   const [typing, setTyping] = useState(false);
   const [messages, setMessages] = useState([
     {
-      message: "What kind of encounters are you looking for?",
+      message: "Can you describe the monster you would like to create?",
       sender: "ChatGPT",
       direction: "incoming",
     }
@@ -49,7 +49,7 @@ function Encounters() {
 
     const systemMessage = {
       role: "system",
-      content: "Speak like you are a master D&D player that creates encounters for your friends."
+      content: "Speak like you are a master D&D player that creates character sheets for your friends."
     }
 
     const apiRequestBody = {
@@ -101,4 +101,4 @@ function Encounters() {
     </div>
   );
 }
-export default Encounters;
+export default Monsters;

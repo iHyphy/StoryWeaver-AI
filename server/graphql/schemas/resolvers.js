@@ -13,7 +13,7 @@ const resolvers = {
     },
     getOpenAIApiKey: async () => {
       // Retrieve the OpenAI API key from the environment variable
-      return process.env.REACT_APP_OPENAI_API_KEY || '';
+      return process.env.OPENAI_API_KEY || '';
     },
   },
 
@@ -85,7 +85,7 @@ const resolvers = {
         // You can perform validation or additional checks here
         
         // For demonstration purposes, let's just set it to an environment variable
-        process.env.REACT_APP_OPENAI_API_KEY = apiKey;
+        process.env.OPENAI_API_KEY = apiKey;
         
         // You might want to return a success message or the new API key
         return 'OpenAI API key has been set successfully';
