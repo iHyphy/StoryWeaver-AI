@@ -12,6 +12,7 @@ import SignOut from './pages/signout.jsx';
 import SignUp from './pages/signup.jsx';
 import NotFound from './pages/NotFound.jsx';
 import Gameboard from './pages/Gameboard.jsx';
+import Diceroll from './components/diceroll.jsx'
 
 const router = createBrowserRouter([
   {
@@ -54,8 +55,11 @@ const router = createBrowserRouter([
       {
         path: '/gameboard',
         element: <Gameboard />
+      },
+      {
+        path: '/diceroll',
+        element: <Diceroll />
       }
-
     ]
   }
 ]);
