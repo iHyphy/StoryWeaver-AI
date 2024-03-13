@@ -5,9 +5,11 @@ const SignOut = () => {
   localStorage.removeItem('token');
   
   return (
-    <div className="page-container">
-      <h2>Sign Out Page</h2>
-      <p>You have been successfully signed out.</p>
+    <div className="sign-out-page">
+      <div className="page-container">
+        <h2>Sign Out Page</h2>
+        <p>You have been successfully signed out.</p>
+      </div>
     </div>
   );
 };

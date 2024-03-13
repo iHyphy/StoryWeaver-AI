@@ -1,21 +1,17 @@
 import { useState } from "react";
-import { useQuery, gql } from "@apollo/client"; // Import useQuery and gql
+// import reactLogo from "../assets/react.svg";
+// import viteLogo from "../../public/vite.svg";
+import "../../src/App.css";
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from '@chatscope/chat-ui-kit-react'; 
 
-const GET_OPENAI_API_KEY = gql`
-  query GetOpenAIApiKey {
-    getOpenAIApiKey
-  }
-`;
+//const API_KEY = "";
 
-function Monsters() {
-  const { loading, error, data } = useQuery(GET_OPENAI_API_KEY); // Use the useQuery hook to fetch the API key
-
+function Encounters() {
   const [typing, setTyping] = useState(false);
   const [messages, setMessages] = useState([
     {
-      message: "Now let's talk about monsters. What kind of monsters are you looking for?",
+      message: "What kind of encounters are you looking for?",
       sender: "ChatGPT",
       direction: "incoming",
     }
@@ -38,13 +34,53 @@ function Monsters() {
   };
 
   async function processMessageToChatGPT(chatMessages, retryDelay = 1000) {
-    // Your existing logic for processing messages
-  }
+    
+    let apiMessages = chatMessages.map((messageObject) => {
+      let role = "";
 
-  if (loading) return <p>Loading...</p>; // Show loading message while fetching API key
-  if (error) return <p>Error fetching API key: {error.message}</p>; // Show error message if fetching API key fails
+      if(messageObject.sender === "ChatGPT") {
+        
+        role = "assistant";
+      } else {
+        role = "user";
+      }
+      return { role: role, content: messageObject.message }
+    });
 
-  const API_KEY = data.getOpenAIApiKey; // Get the API key from the fetched data
+    const systemMessage = {
+      role: "system",
+      content: "Speak like you are a master D&D player that creates encounters for your friends."
+    }
+
+    const apiRequestBody = {
+      "model": "gpt-3.5-turbo",
+      "messages": [
+        systemMessage,
+        ...apiMessages
+      ]
+    }
+    
+   await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + API_KEY,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(apiRequestBody)
+      }).then((data) => {
+        return data.json();
+      }).then((data) => {
+        console.log(data);
+        console.log(data.choices[0].message.content);
+        setMessages(
+          [...chatMessages, {
+            message: data.choices[0].message.content,
+            sender: "ChatGPT"
+          }]
+        );
+        setTyping(false);
+      })
+    }
 
   return (
     <div className="App">
@@ -65,5 +101,4 @@ function Monsters() {
     </div>
   );
 }
-
-export default Monsters;
+export default Encounters;

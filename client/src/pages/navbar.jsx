@@ -1,23 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-
-
 function Navbar() {
-
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light" style={{border: '5px solid grey'}}>
+    <nav className="navbar navbar-expand-lg navbar-light" style={{ border: '2px solid blue', backgroundColor: 'grey' }}>
       <div className="container-fluid">
-        <Link to="/" className="navbar-brand">D&D Campaign Builder</Link>
+        <Link to="/" className="navbar-brand" style={{ fontSize: '24px', color: 'black' }}>D&D Campaign Builder</Link>
         <div className="navbar-nav">
-          <Link to="/charactersheet" className="nav-link">Character Sheet</Link>
-          <Link to="/encounters" className="nav-link">Encounters</Link>
-          <Link to="/monsters" className="nav-link">Monsters</Link>
+          <Link to="/charactersheet" className="nav-link" style={{ fontSize: '18px', color: 'black' }}>Character Sheet</Link>
+          <Link to="/encounters" className="nav-link" style={{ fontSize: '18px', color: 'black' }}>Encounters</Link>
+          <Link to="/monsters" className="nav-link" style={{ fontSize: '18px', color: 'black' }}>Monsters</Link>
         </div>
         <div className="navbar-nav ms-auto">
-          <Link to="/profile" className="nav-link">Profile</Link>
-          <Link to="/login" className="nav-link">Login</Link>
-          <Link to="/signout" className="nav-link">Sign Out</Link>
+          <Link to="/profile" className="nav-link" style={{ fontSize: '18px', color: 'black' }}>Profile</Link>
+          <Link to="/login" className="nav-link" style={{ fontSize: '18px', color: 'black' }}>Login</Link>
+          <Link to="/signout" className="nav-link" style={{ fontSize: '18px', color: 'black' }}>Sign Out</Link>
         </div>
       </div>
     </nav>
@@ -25,27 +22,3 @@ function Navbar() {
 }
 
 export default Navbar;
-
-
-//   return (
-//     <nav className="navbar">
-//       <div className="navbar-brand">
-//         <Link to="/" className="navbar-item">D&D Campaign Builder</Link>
-//       </div>
-//       <div className="navbar-menu">
-//         <div className="navbar-start">
-//           <Link to="/charactersheet" className="navbar-item">Character Sheet</Link>
-//           <Link to="/encounters" className="navbar-item">Encounters</Link>
-//           <Link to="/monsters" className="navbar-item">Monsters</Link>
-//         </div>
-//         <div className="navbar-end">
-//           <Link to="/profile" className="navbar-item">Profile</Link>
-//           <Link to="/login" className="navbar-item">Login</Link>
-//           <Link to="/signout" className="navbar-item">Sign Out</Link>
-//         </div>
-//       </div>
-//     </nav>
-//   );
-// }
-
-// export default Navbar;
