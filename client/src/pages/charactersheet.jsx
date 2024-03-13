@@ -1,13 +1,21 @@
 import { useState } from "react";
-import "../../src/App.css";
+import { useQuery, gql } from "@apollo/client"; // Import useQuery and gql
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from '@chatscope/chat-ui-kit-react'; 
 
-function App() {
+const GET_OPENAI_API_KEY = gql`
+  query GetOpenAIApiKey {
+    getOpenAIApiKey
+  }
+`;
+
+function Charactersheet() {
+  const { loading, error, data } = useQuery(GET_OPENAI_API_KEY); // Use the useQuery hook to fetch the API key
+
   const [typing, setTyping] = useState(false);
   const [messages, setMessages] = useState([
     {
-      message: "Hello! I'm StoryWeaver, a conversational AI. I can help you with creating character sheets for your D&D game. Can you provide me your name, character name, class, alignment, & level. ",
+      message: "Now let's talk about monsters. What kind of monsters are you looking for?",
       sender: "ChatGPT",
       direction: "incoming",
     }
@@ -20,99 +28,23 @@ function App() {
       direction: "outgoing"
     };
 
-
-    // Update messages state optimistically
-    setMessages(prevMessages => [...prevMessages, newMessage]);
+    const newMessages = [...messages, newMessage];
+    
+    setMessages(newMessages);
 
     setTyping(true);
 
-    try {
-      await processMessageToChatGPT([...messages, newMessage]);
-    } catch (error) {
-      console.error('Error processing message:', error);
-      // Revert the message state if an error occurs
-      setMessages(prevMessages => prevMessages.slice(0, -1));
-      setTyping(false);
-    }
+    await processMessageToChatGPT(newMessages);
   };
 
-
   async function processMessageToChatGPT(chatMessages, retryDelay = 1000) {
-    
-    let apiMessages = chatMessages.map((messageObject) => {
-      let role = "";
+    // Your existing logic for processing messages
+  }
 
+  if (loading) return <p>Loading...</p>; // Show loading message while fetching API key
+  if (error) return <p>Error fetching API key: {error.message}</p>; // Show error message if fetching API key fails
 
-      if(messageObject.sender === "ChatGPT") {
-        
-        role = "assistant";
-      } else {
-        role = "user";
-      }
-      return { role: role, content: messageObject.message }
-    });
-
-
-    const systemMessage = {
-      role: "system",
-      content: "Speak like you are a master D&D player that creates character sheets for your friends."
-    }
-    
-    const apiRequestBody = {
-      "model": "gpt-3.5-turbo",
-      "messages": [
-        systemMessage,
-        ...apiMessages
-      ]
-    }
-    
-    await fetch("http://localhost:3001/api/generateCharacterSheet", {
-    method: "POST",
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    
-      body: JSON.stringify(apiRequestBody)
-      })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        console.log('Sending request to OpenAI API:', apiRequestBody);
-        return response.json();
-      })
-      .then((data) => {
-        console.log('OpenAI API response:', data);
-        if (data.choices && data.choices[0] && data.choices[0].message) {
-          console.log(data.choices[0].message.content);
-          setMessages(
-            [...chatMessages, {
-              message: data.choices[0].message.content,
-              sender: "ChatGPT"
-            }]
-          );
-        } else {
-          console.error('Unexpected API response', data);
-          setMessages(
-            [...chatMessages, {
-              message: "Sorry, I couldn't process your request. Please try again.",
-              sender: "ChatGPT"
-            }]
-          );
-        }
-        setTyping(false);
-      })
-      .catch((error) => {
-        console.error('Fetch request failed:', error);
-        setMessages(
-          [...chatMessages, {
-            message: "Sorry, I couldn't process your request. Please try again later.",
-            sender: "ChatGPT"
-          }]
-        );
-        setTyping(false);
-      });
-    }
+  const API_KEY = data.getOpenAIApiKey; // Get the API key from the fetched data
 
   return (
     <div className="App">
@@ -134,9 +66,4 @@ function App() {
   );
 }
 
-export default App;
-
-
-
-
-
+export default Charactersheet;

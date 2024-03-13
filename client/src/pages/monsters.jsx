@@ -5,13 +5,13 @@ import "../../src/App.css";
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from '@chatscope/chat-ui-kit-react'; 
 
-const API_KEY = "";
+//const API_KEY = "";
 
-function Monsters() {
+function Encounters() {
   const [typing, setTyping] = useState(false);
   const [messages, setMessages] = useState([
     {
-      message: "Now let's talk about monsters. What kind of monsters are you looking for?",
+      message: "What kind of encounters are you looking for?",
       sender: "ChatGPT",
       direction: "incoming",
     }
@@ -49,7 +49,7 @@ function Monsters() {
 
     const systemMessage = {
       role: "system",
-      content: "Speak like you are a master D&D player that creates monsters for your friends."
+      content: "Speak like you are a master D&D player that creates encounters for your friends."
     }
 
     const apiRequestBody = {
@@ -101,4 +101,4 @@ function Monsters() {
     </div>
   );
 }
-export default Monsters;
+export default Encounters;

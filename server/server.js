@@ -4,7 +4,7 @@ const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
 const path = require('path');
 const cors = require('cors');
-const axios = require('axios');
+
 const db = require('./config/connection.js');
 const typeDefs = require('./graphql/schemas/typeDefs.js');
 const resolvers = require('./graphql/schemas/resolvers.js');
@@ -32,11 +32,8 @@ const startApolloServer = async () => {
   await server.start();
 
   app.use(cors());
-
   app.use(express.json());
-
   app.use(express.urlencoded({ extended: true }));
-
   app.use('/graphql', expressMiddleware(server, {
     context: authMiddleware
   }));
