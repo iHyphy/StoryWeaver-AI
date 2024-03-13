@@ -51,8 +51,6 @@ ${tests}
 n/a
 
 ## Questions
-- [bybymaxy](https://github.com/bybymaxy/StoryWeaver-AI)
-- [send-email-to](mailto:bybymaxy@gmail.com)
 - [Live website link]()
 
 ## Screenshots
