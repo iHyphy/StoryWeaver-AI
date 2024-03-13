@@ -26,6 +26,7 @@ ${installation}
 -install dependencies
 -run mongod
 -run nodemon server.js
+-run npm run dev
 ensure you have mongocompass and insomnia installed or various other apps for the same purpose
 
 ## Usage
@@ -40,7 +41,7 @@ ${features}
 
 ## Contributing
 ${contributing}
-Albert Branom, Xpert Learning Assistant, 
+Albert Branom, Benjamin Pippenjer, Manraj, Dominique Xpert Learning Assistant, 
 
 ## License
 [Mit License](https://choosealicense.com/licenses/mit/#)
@@ -50,9 +51,9 @@ ${tests}
 n/a
 
 ## Questions
-- [bybymaxy](https://github.com/bybymaxy/Social-boys-API)
+- [bybymaxy](https://github.com/bybymaxy/StoryWeaver-AI)
 - [send-email-to](mailto:bybymaxy@gmail.com)
-- [Live website link](https://drive.google.com/file/d/1eLlhLA8fxQECsv6mzRE4UPzAkDkmE8u5/view)
+- [Live website link]()
 
 ## Screenshots
 ${screenshots}
